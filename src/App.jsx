@@ -14,7 +14,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const [page, setPage] = useState(3);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     setError(null);
