@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.container {
+  padding: 0px 20px !important;
+  margin: 0px auto;
+}
+
+div:hover > .text-shadow span {
+  background-color: red;
+  width: fit-content;
+  padding: 0 4px;
+  display: block;
+}
