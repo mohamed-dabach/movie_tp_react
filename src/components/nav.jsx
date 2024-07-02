@@ -1,10 +1,14 @@
 import { useState } from "react";
+import { setSearchQuery, setPage } from "../redux/movieSlice";
+import { useDispatch } from "react-redux";
 
-const Nav = ({ setSearchQuery }) => {
+const Nav = () => {
   const [searchValue, setSearchValue] = useState("");
+  const dispatch = useDispatch();
 
   const handleSearch = () => {
-    setSearchQuery(searchValue);
+    dispatch(setSearchQuery(searchValue));
+    dispatch(setPage(1));
   };
   return (
     <nav className="w-full bg-red-200 py-3">

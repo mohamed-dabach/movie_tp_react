@@ -1,8 +1,12 @@
+import { Link } from "react-router-dom";
 import defaultImage from "../imgs/404_image.png";
 export default function Movie({ movie }) {
   return (
     <>
-      <div className="max-w-[500px] rounded overflow-hidden shadow-lg m-auto relative text-white ">
+      <Link
+        to={`movie/${movie.id}`}
+        className="max-w-[500px] rounded overflow-hidden shadow-lg m-auto relative text-white "
+      >
         <img
           className="w-full"
           src={
@@ -24,7 +28,7 @@ export default function Movie({ movie }) {
             })}
           </div>
         </div>
-      </div>
+      </Link>
     </>
   );
 }

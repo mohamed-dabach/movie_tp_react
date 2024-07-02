@@ -3,22 +3,42 @@ import Movie from "./components/movie";
 import Nav from "./components/nav";
 import { useEffect, useState } from "react";
 import Pagination from "./components/pagination";
-
+import { useDispatch } from "react-redux";
+import {
+  setLoading,
+  setError,
+  setSearchQuery,
+  setData,
+  setPage,
+  selectLoading,
+  selectSearchQuery,
+  selectPage,
+  selectData,
+  selectError,
+  selectTotalPages,
+  setTotalPages,
+} from "./redux/movieSlice";
+import { useSelector } from "react-redux";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./pages/home";
+import View from "./pages/view";
 const BASE_URL =
   "https://api.themoviedb.org/3/search/tv?api_key=fef55a6754f2f6d00a0038388915039c&include_adult=false";
 
 export default function App() {
-  const [data, setData] = useState([]);
+  const dispatch = useDispatch();
 
-  const [searchQuery, setSearchQuery] = useState("s");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const searchQuery = useSelector(selectSearchQuery);
+  const page = useSelector(selectPage);
 
-  const [page, setPage] = useState(1);
+  const loading = useSelector(selectLoading);
+  const data = useSelector(selectData);
+  const error = useSelector(selectError);
+  const total_pages = useSelector(selectTotalPages);
 
   useEffect(() => {
-    setError(null);
-    setLoading(true);
+    dispatch(setLoading(true));
+    dispatch(setError(null));
 
     handleFetch(searchQuery, page)
       .then((res) => {
@@ -27,42 +47,30 @@ export default function App() {
         }
         return res.json();
       })
-      .then((data) => setData(data))
-      .catch((error) => setError(error))
-      .finally(() => setLoading(false));
-  }, [searchQuery, page]);
+      .then((dat) => {
+        dispatch(setData(dat.results));
+        dispatch(setPage(dat.page));
+        dispatch(setLoading(false));
+        dispatch(setError(null));
+        dispatch(setTotalPages(dat.total_pages));
+      })
+      .catch((error) => dispatch(setError(error)))
+      .finally(() => dispatch(setLoading(false)));
+  }, [searchQuery, page, dispatch]);
 
   const handleFetch = async (query = "", page = 1) => {
     return await fetch(`${BASE_URL}&query=${query}&page=${page}`);
   };
-  console.log(data);
+
   return (
     <>
-      <Nav setSearchQuery={setSearchQuery} />
-
-      <section className="py-4 ">
-        <div className="container grid gap-2 grid-cols-1 lg:grid-cols-[repeat(4,1fr)] md:grid-cols-[repeat(2,1fr)] items-center justify-center">
-          {loading ? (
-            <div className="text-center">Loading...</div>
-          ) : error ? (
-            <div className="text-center">{error.message}</div>
-          ) : data?.results?.length === 0 ? (
-            <div className="text-center">No data found</div>
-          ) : (
-            data?.results?.map((movie) => (
-              <Movie key={movie.id} movie={movie} />
-            ))
-          )}
-        </div>
-
-        <div className="container flex items-center justify-center mt-[40px_!important] pt-5">
-          <Pagination
-            total_pages={data?.total_pages}
-            setPage={setPage}
-            currentPage={page}
-          />
-        </div>
-      </section>
+      <BrowserRouter>
+        <Nav setSearchQuery={setSearchQuery} setPage={setPage} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/movie/:id" element={<View />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
