@@ -1,42 +1,36 @@
-import Movie from "./components/movie";
-// import data from "../data.json";
-import Nav from "./components/nav";
-import { useEffect, useState } from "react";
-import Pagination from "./components/pagination";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import Layout from "./layout";
 import {
   setLoading,
   setError,
-  setSearchQuery,
   setData,
   setPage,
-  selectLoading,
   selectSearchQuery,
   selectPage,
-  selectData,
-  selectError,
-  selectTotalPages,
   setTotalPages,
+  selectAdults,
 } from "./redux/movieSlice";
 import { useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/home";
 import View from "./pages/view";
 const BASE_URL =
-  "https://api.themoviedb.org/3/search/tv?api_key=fef55a6754f2f6d00a0038388915039c&include_adult=false";
+  "https://api.themoviedb.org/3/search/tv?api_key=fef55a6754f2f6d00a0038388915039c&";
 
 export default function App() {
   const dispatch = useDispatch();
 
   const searchQuery = useSelector(selectSearchQuery);
+  const isAdutls = useSelector(selectAdults);
   const page = useSelector(selectPage);
 
-  const loading = useSelector(selectLoading);
-  const data = useSelector(selectData);
-  const error = useSelector(selectError);
-  const total_pages = useSelector(selectTotalPages);
-
   useEffect(() => {
+    const handleFetch = async (query = "", page = 1) => {
+      return await fetch(
+        `${BASE_URL}include_adult=${isAdutls}&query=${query}&page=${page}`
+      );
+    };
     dispatch(setLoading(true));
     dispatch(setError(null));
 
@@ -56,19 +50,17 @@ export default function App() {
       })
       .catch((error) => dispatch(setError(error)))
       .finally(() => dispatch(setLoading(false)));
-  }, [searchQuery, page, dispatch]);
-
-  const handleFetch = async (query = "", page = 1) => {
-    return await fetch(`${BASE_URL}&query=${query}&page=${page}`);
-  };
+  }, [searchQuery, page, dispatch, isAdutls]);
+  const basename = process.env.PUBLIC_URL;
 
   return (
     <>
       <BrowserRouter>
-        <Nav setSearchQuery={setSearchQuery} setPage={setPage} />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/movie/:id" element={<View />} />
+          <Route exact path="/" element={<Layout />}>
+            <Route exact index element={<Home />} />
+            <Route exact path="/movie/:id" element={<View />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>

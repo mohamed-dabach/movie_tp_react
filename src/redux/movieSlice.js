@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { set } from "mongoose";
 
 const movieSlice = createSlice({
   name: "movie",
@@ -9,8 +10,10 @@ const movieSlice = createSlice({
     loading: false,
     error: null,
     page: 1,
+    adults: false,
   },
 
+  // reducers
   reducers: {
     setData: (state, action) => {
       state.data = action.payload;
@@ -30,6 +33,9 @@ const movieSlice = createSlice({
     setTotalPages: (state, action) => {
       state.totalResults = action.payload;
     },
+    setAdults: (state, action) => {
+      state.adults = action.payload;
+    },
   },
 });
 
@@ -40,6 +46,7 @@ export const {
   setError,
   setPage,
   setTotalPages,
+  setAdults,
 } = movieSlice.actions;
 
 export const selectData = (state) => state.movie.data;
@@ -49,4 +56,5 @@ export const selectError = (state) => state.movie.error;
 export const selectPage = (state) => state.movie.page;
 export const selectTotalPages = (state) => state.movie.totalResults;
 
+export const selectAdults = (state) => state.movie.adults;
 export default movieSlice.reducer;

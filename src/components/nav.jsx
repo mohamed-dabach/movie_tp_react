@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 
 const Nav = () => {
   const [searchValue, setSearchValue] = useState("");
+  const [selectVal, setSelectVal] = useState(false);
   const dispatch = useDispatch();
 
   const handleSearch = () => {
@@ -15,9 +16,17 @@ const Nav = () => {
       <div className="container flex items-center justify-between">
         <p>NAV BAR</p>
         <div>
+          <select
+            value={selectVal}
+            onChange={(e) => setSelectVal(e.target.value)}
+            className="py-1 px-3 focus:outline-red-300 rounded-s-lg"
+          >
+            <option value="false">Include Adults</option>
+            <option value="true">Exclude Adults</option>
+          </select>
           <input
             type="text"
-            className="py-1 px-3 focus:outline-red-300 rounded-s-lg"
+            className="py-1 px-3 focus:outline-red-300 "
             placeholder="Search your movie"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}

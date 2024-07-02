@@ -25,7 +25,7 @@ export default function View() {
                 : defaultImage
             }
             alt={movie?.name}
-            className="max-w-full rounded-lg"
+            className="max-w-full rounded-lg border-2"
           />
         </div>
 
