@@ -16,31 +16,33 @@ export default function View() {
   }, [data, id]);
   return (
     <div className="w-full">
-      <div className="container ">
-        <div className="py-4 overflow-hidden">
-          <img
-            src={
-              movie?.backdrop_path
-                ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
-                : defaultImage
-            }
-            alt={movie?.name}
-            className="max-w-full rounded-lg border-2"
-          />
-        </div>
+      <div className="container  ">
+        <div className=" grid sm:grid-cols-2 gap-2 py-6 ">
+          <div className="overflow-hidden">
+            <img
+              src={
+                movie?.backdrop_path
+                  ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
+                  : defaultImage
+              }
+              alt={movie?.name}
+              className="max-w-full rounded-lg border-2"
+            />
+          </div>
 
-        <ul>
-          <li className="">
-            Name: <span className="font-bold">{movie?.name}</span>
-          </li>
-          <li className="">
-            Date: <span className="font-bold">{movie?.first_air_date}</span>
-          </li>
-          <li className="">
-            Original language:{" "}
-            <span className="font-bold">{movie?.original_language}</span>
-          </li>
-        </ul>
+          <ul>
+            <li className="">
+              Name: <span className="font-bold">{movie?.name}</span>
+            </li>
+            <li className="">
+              Date: <span className="font-bold">{movie?.first_air_date}</span>
+            </li>
+            <li className="">
+              Original language:{" "}
+              <span className="font-bold">{movie?.original_language}</span>
+            </li>
+          </ul>
+        </div>
         <h2 className="font-bold text-lg mt-5 mb-2">Movie overview</h2>
         <span>{movie?.overview}</span>
         <br />

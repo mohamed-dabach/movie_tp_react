@@ -51,7 +51,6 @@ export default function App() {
       .catch((error) => dispatch(setError(error)))
       .finally(() => dispatch(setLoading(false)));
   }, [searchQuery, page, dispatch, isAdutls]);
-  const basename = process.env.PUBLIC_URL;
 
   return (
     <>

@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { setSearchQuery, setPage } from "../redux/movieSlice";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Nav = () => {
   const [searchValue, setSearchValue] = useState("");
   const [selectVal, setSelectVal] = useState(false);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const handleSearch = () => {
+    navigate("/");
     dispatch(setSearchQuery(searchValue));
     dispatch(setPage(1));
   };
